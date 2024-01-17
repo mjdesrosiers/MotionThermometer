@@ -5,16 +5,18 @@
 #include <Adafruit_Sensor.h>
 #include "Wire.h"
 
-#define PIN_TEMP    22
 #define PIN_MPU_INT 23
-#define PIN_SWITCH  24
-#define CLK_TMP     1
-#define CS_TMP      2
+#define CLK_TMP     2
+#define CS_TMP      3
 #define DO_TMP      4
+#define PIN_TEMP    5
+#define PIN_SWITCH  6
+
 
 #define REPORT_ON_SERIAL
 #define REPORT_ON_KEYBOARD
 #define TRIGGER_ON_SWITCH
+//#define TRIGGER_ON_MOTION
 
 #define TRIGGER_COOLDOWN_MS 2000
 
@@ -65,6 +67,7 @@ void setup() {
     delay(10);
   }
   
+  Serial.println("Booting!");
   
   #ifdef TRIGGER_ON_MOTION
     // Configure accelerometer for motion interrupt
@@ -95,6 +98,7 @@ void loop() {
     float temperatureLocal = sensor.getTemp();
     float temperatureRemote = thermocouple.readCelsius();
     reportData(temperatureLocal, temperatureRemote);
+    triggered = false;
   }
 
   if (onCooldown) {
